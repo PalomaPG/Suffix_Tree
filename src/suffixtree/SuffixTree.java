@@ -77,27 +77,30 @@ public  class SuffixTree {
 	
 	public void checkPath(Edge edge, int j,int i){
 		
+		if(i==j) return;
+		if(j>i) System.out.println("WTF!");
+		
 		Node edge_child = edge.getChild();
 		String edge_label = edge.getLabel(text);
 		String substr= text.substring(j, i+1);
 		
-		if(text.charAt(i)=='r' && text.charAt(j)=='i'){
-			System.err.println("The rest of the text: "+substr);
-			}
-		
-		
+		if(j==i-1){
+			System.err.println("Starting point");
+		}
+
 		
 		if(edge_child instanceof Leaf){
 			
+			if(j==i-1){
+				System.err.println("Edge label length (child is a leaf): "+ Integer.toString(edge_label.length()));
+				System.err.println("substr length  (child is a leaf): "+ Integer.toString(substr.length()));
+			}
 				
-				edge_label = edge.getLabel(text).substring(0, i-j+1);
+
 		//System.err.println(edge_label);
 				if(!edge_label.equals(substr)){
 				//System.err.println("holiii");
-					if(text.charAt(i)=='r'){
-						System.err.println("Edge label (leaf): "+edge_label);
-						System.err.println("Substring path: "+substr);
-						}
+
 					NonLeaf new_node = new NonLeaf(root);
 				
 					int diff = i-j-1;
@@ -121,12 +124,25 @@ public  class SuffixTree {
 						sl_aux = new_node.getSuffixLink();
 					}
 				}
+				if(j==i-1){
+					System.err.println("End");
+				}
 				return;
 			
 			}
 		else{
 				
+			if(j==i-1){
+				System.err.println("Edge label length (child is an inner node): "+ Integer.toString(edge_label.length()));
+				System.err.println("substr length  (child is an inner node): "+ Integer.toString(substr.length()));
+			}
+			
 			if(i-j+1 <= edge_label.length()){
+				
+				if(j==i-1){
+					System.err.println("Edge label length (child is an inner node, ENOUGH): "+ Integer.toString(edge_label.length()));
+					System.err.println("substr length  (child is an inner node, ENOUGH): "+ Integer.toString(substr.length()));
+				}
 					
 				if(!edge_label.equals(substr)){
 				
@@ -140,10 +156,7 @@ public  class SuffixTree {
 					edge.setEnd(new End(new_end));
 					edge.setChild(new_node);
 				
-					if(text.charAt(i)=='r' && text.charAt(j)=='i'){
-						System.err.println("Edge label (inner, enough) : "+edge_label);
-						System.err.println("Substring path: "+substr);
-					}
+
 					new_node.addEntry(text.charAt(new_end), new_edge_1);
 					new_node.addEntry(text.charAt(i), new_edge_2);
 					
@@ -163,32 +176,61 @@ public  class SuffixTree {
 				
 			else {
 				
-					
+				if(j==i-1){
+					System.err.println("Edge label length (child is an inner node, MIDDLE): "+ Integer.toString(edge_label.length()));
+					System.err.println("substr length  (child is an inner node, MIDDLE): "+ Integer.toString(substr.length()));
+				}
 					/*El substr es mayor a edge_label*/
 					SuffixLink child_sl = ((NonLeaf)edge_child).getSuffixLink();
+					
+					if(child_sl == null){
+						System.out.println("Null suffix link");
+					}
+					
 					char chosen_char = substr.charAt(edge_label.length());
+					
+					if(j==i-1){
+						System.err.println(chosen_char);
+					}
+					
 					j=j+edge_label.length();
 					Edge chosen_edge = ((NonLeaf)edge_child).getChildren().get(chosen_char);
 										NonLeaf next = child_sl.getNext();
 
-					if(text.charAt(i)=='r' && text.charAt(j)=='i'){
-						System.err.println("Edge label (inner) : "+edge_label);
-						System.err.println("Substring path: "+substr);
+					if(edge_child == null){
+						System.err.println("Null edge child");
 					}
+					
+					
+					if(chosen_edge==null){
+						if(edge_child == root){System.err.println("Root!");}
+						if(edge_child instanceof NonLeaf){
+							System.err.println("NonLeaf!");
+							if(edge_child instanceof Root)
+								System.err.println("Root!");
+						}
+						System.err.println("Null chosen edge");
+						System.err.println(edge_label);
+						System.err.println(text.charAt(i));
+						System.err.println(text.charAt(j));
+					}
+										
 					Edge sl_edge =next.getChildren().get(chosen_char);
 					
-					if(text.charAt(i)=='r' && text.charAt(j)=='i'){
-						System.err.println("Chosen edge: "+chosen_edge.getLabel(text));
-
+					if(j==i-1){
+						System.err.println("Before new call");
+					}
+					if(chosen_edge != null)
+						checkPath(chosen_edge, j, i);
+					else return;
+					if(j==i-1){
+						System.err.println("A call to the next child has been performed");
 					}
 					
 					if(next != root && sl_edge != null){
 						checkPath(sl_edge, j,i);
-						if(substr.length()<3){
-							System.err.println("SuffixLink");
-						}
 					}
-					checkPath(chosen_edge, j, i);
+					
 
 				}
 			}

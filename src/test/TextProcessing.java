@@ -62,7 +62,7 @@ public class TextProcessing {
 //		String text = "theprotheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookofjectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookof";
 //		System.out.println(text.length());
 		
-		SuffixTree st = new SuffixTree("thecapitainkir");
+		SuffixTree st = new SuffixTree(text);
 		//String text = readFile("input/t15.txt");
 		//System.out.println(text.length());
         TimeWatch watch = TimeWatch.start();
