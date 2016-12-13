@@ -6,5 +6,4 @@ public class Root extends NonLeaf {
 		super(null);
 		// TODO Auto-generated constructor stub
 	}
-
 }
