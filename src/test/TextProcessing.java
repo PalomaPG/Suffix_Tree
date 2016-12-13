@@ -57,12 +57,12 @@ public class TextProcessing {
 //			
 //	}
 //		
-//		System.out.println(readFile("/Users/paolapintosilva/Documents/workspace/T2/src/tests/tt15.txt").length());
+		String text = readFile("input/t15.txt");
 
 //		String text = "theprotheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookofjectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookoftheprojectgutenbergebookof";
 //		System.out.println(text.length());
 		
-		SuffixTree st = new SuffixTree("banana$");
+		SuffixTree st = new SuffixTree("thecapitainkir");
 		//String text = readFile("input/t15.txt");
 		//System.out.println(text.length());
         TimeWatch watch = TimeWatch.start();

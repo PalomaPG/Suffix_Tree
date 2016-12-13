@@ -13,4 +13,9 @@ public class SuffixLink {
 		// TODO Auto-generated method stub
 		node = new_node;
 	}
+
+	public NonLeaf getNext() {
+		// TODO Auto-generated method stub
+		return node;
+	}
 }

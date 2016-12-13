@@ -14,21 +14,13 @@ public  class SuffixTree {
 	
 	private NonLeaf root;
 	protected String text; // String del cual se sacar�n los sufijos
-	protected int num = 0; // Contador para etiquetar los nodos (s�lo para fines de impresi�n)
-	protected NonLeaf v;
-	protected String gamma = "";
-
-	//count_w = 0: w reci�n fue creado; count_w = 1: w fue creado en la extensi�n anterior, por lo tanto, se le asigna un SuffixLink
-	protected int count_w; 	
-	protected NonLeaf last; // �ltimo nodo que se recorri�
-	protected int jL;
 	private End end;
 	public int [] counter_by_phase;
 	private SuffixLink sl_aux;
 	
 	public SuffixTree(String text){
 		this.text = text;
-		root = new NonLeaf();
+		root = new Root();
 		end = new End();
 		sl_aux = null;
 	}	
@@ -76,33 +68,39 @@ public  class SuffixTree {
 
 			//Existe un camino de j a i
 			Edge actual_edge = root.getChildren().get(text.charAt(j));
-			expansion(i,j, actual_edge);
+			checkPath(actual_edge, j, i);
 			
 		}
 		
 		
 	}
 	
-	public void expansion(int i, int j, Edge edge){
+	public void checkPath(Edge edge, int j,int i){
 		
 		Node edge_child = edge.getChild();
 		String edge_label = edge.getLabel(text);
-		if(i-j+1 <= edge_label.length()){
+		String substr= text.substring(j, i+1);
+		
+		if(text.charAt(i)=='r' && text.charAt(j)=='i'){
+			System.err.println("The rest of the text: "+substr);
+			}
+		
+		
+		
+		if(edge_child instanceof Leaf){
 			
-			edge_label = edge.getLabel(text).substring(0, i-j+1);
+				
+				edge_label = edge.getLabel(text).substring(0, i-j+1);
 		//System.err.println(edge_label);
-			String rest_label= text.substring(j, i+1);
-
-			if(edge_child instanceof Leaf){
-			
-			
-				if(!edge_label.equals(rest_label)){
+				if(!edge_label.equals(substr)){
 				//System.err.println("holiii");
-
+					if(text.charAt(i)=='r'){
+						System.err.println("Edge label (leaf): "+edge_label);
+						System.err.println("Substring path: "+substr);
+						}
 					NonLeaf new_node = new NonLeaf(root);
 				
 					int diff = i-j-1;
-				
 					int new_end = edge.getStar()+diff;
 					edge.setEnd(new End(new_end));
 					edge.setChild(new_node);
@@ -123,10 +121,14 @@ public  class SuffixTree {
 						sl_aux = new_node.getSuffixLink();
 					}
 				}
+				return;
+			
 			}
-		
-			else{
-				if(!edge_label.equals(rest_label)){
+		else{
+				
+			if(i-j+1 <= edge_label.length()){
+					
+				if(!edge_label.equals(substr)){
 				
 					NonLeaf new_node = new NonLeaf(root);
 					int diff = i-j-1;
@@ -138,7 +140,11 @@ public  class SuffixTree {
 					edge.setEnd(new End(new_end));
 					edge.setChild(new_node);
 				
-					new_node.addEntry(text.charAt(new_end+1), new_edge_1);
+					if(text.charAt(i)=='r' && text.charAt(j)=='i'){
+						System.err.println("Edge label (inner, enough) : "+edge_label);
+						System.err.println("Substring path: "+substr);
+					}
+					new_node.addEntry(text.charAt(new_end), new_edge_1);
 					new_node.addEntry(text.charAt(i), new_edge_2);
 					
 					if(sl_aux==null){
@@ -149,20 +155,48 @@ public  class SuffixTree {
 						sl_aux = new_node.getSuffixLink();
 					}
 					}
+						return;
+				}
+
+			
+			
+				
+			else {
+				
+					
+					/*El substr es mayor a edge_label*/
+					SuffixLink child_sl = ((NonLeaf)edge_child).getSuffixLink();
+					char chosen_char = substr.charAt(edge_label.length());
+					j=j+edge_label.length();
+					Edge chosen_edge = ((NonLeaf)edge_child).getChildren().get(chosen_char);
+										NonLeaf next = child_sl.getNext();
+
+					if(text.charAt(i)=='r' && text.charAt(j)=='i'){
+						System.err.println("Edge label (inner) : "+edge_label);
+						System.err.println("Substring path: "+substr);
+					}
+					Edge sl_edge =next.getChildren().get(chosen_char);
+					
+					if(text.charAt(i)=='r' && text.charAt(j)=='i'){
+						System.err.println("Chosen edge: "+chosen_edge.getLabel(text));
+
+					}
+					
+					if(next != root && sl_edge != null){
+						checkPath(sl_edge, j,i);
+						if(substr.length()<3){
+							System.err.println("SuffixLink");
+						}
+					}
+					checkPath(chosen_edge, j, i);
 
 				}
-			//Buscar camino//
-			
 			}
-				
-		else {
-			
-		}	
-		
-				
-		
-		
+		return;
 	}
+	
+
+	
 	/*public AbsSuffixTree ukkonen(String s) {		
 		//root.setName(num);
 		

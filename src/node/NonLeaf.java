@@ -11,11 +11,6 @@ public class NonLeaf extends Node {
     protected HashMap<Character, Edge> children;
     private SuffixLink sl;
     
-    public NonLeaf(){			
-		children = new HashMap<Character, Edge>();
-		//st.counter_by_phase[st.fase]++;
-		sl = null;
-	}
     
     public NonLeaf(NonLeaf node){
     	children =  new HashMap<Character, Edge>();
